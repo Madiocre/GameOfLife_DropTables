@@ -4,10 +4,7 @@
 ![LOGO](Client/src/assets/images/Logo.png)
 
 ## Live
-
-- [remyrecipes.up.railway.app](https://remyrecipes.up.railway.app/)  
-- [remyrecipex.up.railway.app](https://remyrecipex.up.railway.app/) (backup)
-
+Grab your Os version from releases
 
 ## Screenshots
 ![s1](.res/s1.png)
