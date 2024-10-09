@@ -1,8 +1,14 @@
+import sys
+from os import path
 import tkinter as tk
 from tkinter import Label, Canvas
 from PIL import Image, ImageTk
 from gol import GameOfLife
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', path.dirname(path.abspath(__file__)))
+    return path.join(base_path, relative_path)
 class MainApplication:
     def __init__(self, root):
         self.root = root
@@ -40,7 +46,7 @@ class MainApplication:
             self.canvas.create_line(0, i, self.root.winfo_width(), i, fill=color)
 
     def load_logo(self):
-        img = Image.open("./assets/img/logo.jpg")
+        img = Image.open(resource_path("assets/img/logo.jpg"))
         img = img.resize((200, 200))
         self.logo_image = ImageTk.PhotoImage(img)
 

@@ -1,4 +1,6 @@
-# for debuginng
+# for debuginng/building
 watchdog
+pyinstaller
 
+# required
 pillow

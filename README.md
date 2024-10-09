@@ -70,6 +70,11 @@
 4. Run
    - `python3 main.py`
 
+## Building
+- make sure you have all requirments installed (See last section)
+- On linux run `pyinstaller --onefile --add-data "./assets:assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py`
+- On windows run `pyinstaller --onefile --add-data "assets;assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py`
+- Your build should be in `dist/` folder
 
 ## Running the Application (Still under progress)
 
