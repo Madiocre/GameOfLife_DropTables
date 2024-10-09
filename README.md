@@ -49,6 +49,11 @@
 
 ```
 
+## Development
+- Set up python3-tk `sudo apt install python3-tk`
+- install requirments `pip3 install -r requirments.txt`
+- Run `python3 whdog.py` For hot reloads
+
 ## Setup and Installation
 
 1. Clone the repository:
@@ -59,7 +64,10 @@
 2. Set up python3-tk:
    - `sudo apt install python3-tk`
 
-3. Run
+3. Install requirments:
+   - `pip3 install -r requirments.txt`
+
+4. Run
    - `python3 main.py`
 
 
