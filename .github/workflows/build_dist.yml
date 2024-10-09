@@ -6,6 +6,34 @@ on:
       - main
 
 jobs:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'  # Choose your version
+
+      - name: Install requirments
+        run: |
+          pip install -r requirments.txt
+
+      - name: Build Linux executable
+        run: |
+          pyinstaller --onefile --add-data "./assets:assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py
+        shell: bash
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: dist/main
+
   build-windows:
     runs-on: windows-latest
     steps:
@@ -30,5 +58,5 @@ jobs:
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-binary
-          path: dist/*
+          name: windows-build
+          path: dist/main.exe
