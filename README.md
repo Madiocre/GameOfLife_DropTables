@@ -1,10 +1,10 @@
 # GameOfLife_DropTables
 
 
-![LOGO](Client/src/assets/images/Logo.png)
+![LOGO](assets/img/logo.jpg)
 
 ## Live
-Grab your Os version from releases
+Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife_DropTables/releases)
 
 ## Screenshots
 ![s1](.res/s1.png)
@@ -33,7 +33,6 @@ Grab your Os version from releases
 
 ## Features
 
-- User authentication (register, login, logout)
 - Responsive design for various screen sizes
 
 ## Technology Stack
@@ -43,7 +42,20 @@ Grab your Os version from releases
 ## Project Structure
 
 ```text
+.
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── assets
+│   └── img
+│       └── logo.jpg
+├── gol.py
+├── main.py
+├── main.spec
+├── requirments.txt
+└── whdog.py
 
+2 directories, 9 files
 ```
 
 ## Development
@@ -55,8 +67,8 @@ Grab your Os version from releases
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/0x3mr/RemyRecipeX
-   cd RemyRecipeX
+   git clone https://github.com/Madiocre/GameOfLife_DropTables/
+   cd GameOfLife_DropTables
    ```
 2. Set up python3-tk:
    - `sudo apt install python3-tk`
@@ -83,7 +95,7 @@ Enjoy :D
 
 ## Configuration
 
-Configuration settings are managed in `config.py`. Different configurations are available for development, testing, and production environments.
+................
 
 ## Authors
 
