@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import Label, Button, Canvas, Frame, Scale
+import pygame
+from pygame import mixer
 
 class GameOfLife:
     def __init__(self, master):
@@ -7,6 +9,16 @@ class GameOfLife:
         self.cell_size = 20
         self.is_running = False
         self.speed = 1
+        self.is_selecting = False
+        self.last_cell = None
+
+        # pygame for audio :D
+        pygame.mixer.init()
+        self.background_music = mixer.Sound("assets/music/s3.wav")
+        self.click_sound = mixer.Sound("assets/music/s2.wav")
+        self.remove_sound = mixer.Sound("assets/music/s1.wav")
+
+        # self.background_music.play(-1)  # loop
 
         # frame on top of grid Canvas to contain the controls
         self.frame = Frame(self.master)
@@ -22,7 +34,10 @@ class GameOfLife:
         self.create_control_panel()
         
         self.master.bind("<Configure>", self.on_resize) # on window resize
-        self.canvas.bind("<Button-1>", self.toggle_cell) # on grid click
+        # hover listners
+        self.canvas.bind("<Button-1>", self.start_selection)
+        self.canvas.bind("<B1-Motion>", self.update_selection)
+        self.canvas.bind("<ButtonRelease-1>", self.end_selection)
 
         # Initial draw with 100ms delay PYTHON UI ISSUES
         self.master.after(100, self.initialize_grid)
@@ -60,6 +75,52 @@ class GameOfLife:
                 fill = "white" if self.grid[i][j] == 0 else "black"
                 self.canvas.create_rectangle(x1, y1, x2, y2, fill=fill, outline="gray")
 
+    def start_selection(self, event):
+        # on box drag + hover
+        self.is_selecting = True
+        self.last_cell = (event.y // self.cell_size, event.x // self.cell_size)
+        self.toggle_cell(event)
+
+    def update_selection(self, event):
+        # while hovering
+        if self.is_selecting:
+            current_cell = (event.y // self.cell_size, event.x // self.cell_size)
+            self.fill_cells_between(self.last_cell, current_cell)
+            self.last_cell = current_cell
+            self.draw_grid()
+            self.click_sound.play()
+
+    def fill_cells_between(self, start, end):
+        # calc new boxes enabled
+        # use parent box as start point
+        # calc coords distance
+        # highlight new selected if it's at that location
+        x0, y0 = start
+        x1, y1 = end
+        dx = abs(x1 - x0)
+        dy = abs(y1 - y0)
+        sx = 1 if x0 < x1 else -1
+        sy = 1 if y0 < y1 else -1
+        err = dx - dy
+
+        while True:
+            if 0 <= x0 < self.height and 0 <= y0 < self.width:
+                self.grid[x0][y0] = 1
+            if x0 == x1 and y0 == y1:
+                break
+            e2 = 2 * err
+            if e2 > -dy:
+                err -= dy
+                x0 += sx
+            if e2 < dx:
+                err += dx
+                y0 += sy
+
+    def end_selection(self, event):
+        # click relase
+        self.is_selecting = False
+        # self.click_sound.play()
+
     def toggle_cell(self, event):
         # find location
         col = event.x // self.cell_size
@@ -68,6 +129,11 @@ class GameOfLife:
         if 0 <= row < self.height and 0 <= col < self.width:
             self.grid[row][col] = 1 - self.grid[row][col]
             self.draw_grid()
+            if 1 - self.grid[row][col]:
+                self.remove_sound.play()
+            else:
+                self.click_sound.play()
+
 
     def create_control_panel(self):
         self.control_panel = Frame(self.frame, bg=None)
@@ -91,7 +157,6 @@ class GameOfLife:
         self.is_running = not self.is_running
         self.play_pause_button.config(text="Pause" if self.is_running else "Play")
         self.master.after(10, self.draw_grid)
-        # TODO auto run next frame
         if self.is_running:
             self.run_game()
 

@@ -4,3 +4,4 @@ pyinstaller
 
 # required
 pillow
+pygame
