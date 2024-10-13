@@ -70,13 +70,19 @@ Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife
    git clone https://github.com/Madiocre/GameOfLife_DropTables/
    cd GameOfLife_DropTables
    ```
-2. Set up python3-tk:
+2. Set up a virtual environment:
+
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows use venv\Scripts\activate
+   ```
+3. Set up python3-tk:
    - `sudo apt install python3-tk`
 
-3. Install requirments:
+4. Install requirments:
    - `pip3 install -r requirments.txt`
 
-4. Run
+5. Run the Application
    - `python3 main.py`
 
 ## Building
