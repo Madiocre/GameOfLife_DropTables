@@ -4,11 +4,8 @@ import tkinter as tk
 from tkinter import Label, Canvas
 from PIL import Image, ImageTk
 from gol import GameOfLife
+from utils import resource_path
 
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    base_path = getattr(sys, '_MEIPASS', path.dirname(path.abspath(__file__)))
-    return path.join(base_path, relative_path)
 class MainApplication:
     def __init__(self, root):
         self.root = root

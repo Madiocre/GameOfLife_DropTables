@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import Label, Button, Canvas, Frame, Scale
 import pygame
 from pygame import mixer
+from utils import resource_path
 
 class GameOfLife:
     def __init__(self, master):
@@ -14,9 +15,9 @@ class GameOfLife:
 
         # pygame for audio :D
         pygame.mixer.init()
-        self.background_music = mixer.Sound("assets/music/s3.wav")
-        self.click_sound = mixer.Sound("assets/music/s2.wav")
-        self.remove_sound = mixer.Sound("assets/music/s1.wav")
+        self.background_music = mixer.Sound(resource_path("assets/music/s3.wav"))
+        self.click_sound = mixer.Sound(resource_path("assets/music/s2.wav"))
+        self.remove_sound = mixer.Sound(resource_path("assets/music/s1.wav"))
 
         # self.background_music.play(-1)  # loop
 
