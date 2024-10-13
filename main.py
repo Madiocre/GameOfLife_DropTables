@@ -1,68 +1,79 @@
 import sys
 from os import path
-import tkinter as tk
-from tkinter import Label, Canvas
-from PIL import Image, ImageTk
+import customtkinter as ctk
+from PIL import Image
 from gol import GameOfLife
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     base_path = getattr(sys, '_MEIPASS', path.dirname(path.abspath(__file__)))
     return path.join(base_path, relative_path)
+
 class MainApplication:
-    def __init__(self, root):
-        self.root = root
+    def __init__(self):
+        self.root = ctk.CTk()
         self.root.title("Game Of Life DropTables;")
-        self.root.geometry("700x500")
+        self.root.geometry("800x600")
+        
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
 
         self.setup_main_ui()
+        self.root.mainloop()
 
     def setup_main_ui(self):
-        self.canvas = Canvas(self.root)
-        self.canvas.pack(fill="both", expand=True)
+        self.main_frame = ctk.CTkFrame(self.root, corner_radius=0)
+        self.main_frame.pack(fill="both", expand=True)
 
-        self.draw_gradient()
+        self.logo_image = ctk.CTkImage(
+            light_image=Image.open(resource_path("assets/img/logo_light.jpg")),
+            dark_image=Image.open(resource_path("assets/img/logo_dark.jpg")),
+            size=(200, 200)
+        )
 
-        self.frame1 = tk.Frame(self.root, bg=None)
-        self.frame1.place(relx=0.5, rely=0.5, anchor="center")
+        self.logo_label = ctk.CTkLabel(self.main_frame, image=self.logo_image, text="")
+        self.logo_label.pack(pady=(50, 20))
 
-        self.load_logo()
+        self.title_label = ctk.CTkLabel(
+            self.main_frame, 
+            text="Game of Life",
+            font=ctk.CTkFont(size=28, weight="bold")
+        )
+        self.title_label.pack(pady=(0, 20))
 
-        self.label1 = tk.Label(self.frame1, text="Press Play to start!")
-        self.label1.pack(pady=(0, 10))
+        self.start_button = ctk.CTkButton(
+            self.main_frame,
+            text="Start Game",
+            command=self.start_game,
+            width=200,
+            height=50,
+            corner_radius=10,
+            font=ctk.CTkFont(size=16, weight="bold")
+        )
+        self.start_button.pack(pady=20)
 
-        self.button = tk.Button(self.frame1, text="Play", command=self.start_game)
-        self.button.pack()
+        self.theme_switch = ctk.CTkSwitch(
+            self.main_frame,
+            text="Dark Mode",
+            command=self.toggle_theme,
+            onvalue="dark",
+            offvalue="light"
+        )
+        self.theme_switch.pack(pady=20)
+        self.theme_switch.select()  # Start in dark mode
 
-        self.root.bind("<Configure>", self.on_resize)
-
-    def draw_gradient(self):
-        height = self.root.winfo_height()
-        for i in range(0, height):
-            r = 0
-            g = 0
-            b = int(i * 255 / height)
-            color = f'#{r:02x}{g:02x}{b:02x}'
-            self.canvas.create_line(0, i, self.root.winfo_width(), i, fill=color)
-
-    def load_logo(self):
-        img = Image.open(resource_path("assets/img/logo.jpg"))
-        img = img.resize((200, 200))
-        self.logo_image = ImageTk.PhotoImage(img)
-
-        self.logo_label = Label(self.frame1, image=self.logo_image)
-        self.logo_label.image = self.logo_image
-        self.logo_label.pack(pady=(0, 10))
-
-    def on_resize(self, event):
-        self.draw_gradient()
+    def toggle_theme(self):
+        if self.theme_switch.get() == "dark":
+            ctk.set_appearance_mode("dark")
+        else:
+            ctk.set_appearance_mode("light")
 
     def start_game(self):
-        self.frame1.destroy()
-        self.canvas.destroy()
+        self.main_frame.pack_forget()
         self.game = GameOfLife(self.root)
 
+    def run(self):
+        self.root.mainloop()
+
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = MainApplication(root)
-    root.mainloop()
+    app = MainApplication()
