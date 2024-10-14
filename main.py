@@ -210,10 +210,10 @@ class MainApplication:
     def toggle_mute(self):
         self.is_muted.set(not self.is_muted.get())
         if self.is_muted.get():
-            pygame.mixer.music.pause()
+            pygame.mixer.music.set_volume(0)
             self.mute_button.config(text="Unmute")
         else:
-            pygame.mixer.music.unpause()
+            pygame.mixer.music.set_volume(1)
             self.mute_button.config(text="Mute")
 
     def create_palette_selector(self):

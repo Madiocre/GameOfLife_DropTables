@@ -41,6 +41,7 @@ This project emphasizes code structure, Tkinter usage, and visual design to prov
 - Grid size controls
 - Customizable game play
 - Muliple colors / New look every start
+- New Pattern Every Start
 - Audio feedback
 - Ready packaged builds on every push
 - Linux + Windows Support
