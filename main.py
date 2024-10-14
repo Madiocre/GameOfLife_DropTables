@@ -1,10 +1,11 @@
-import sys
-from os import path
+# import sys
+# from os import path
 import tkinter as tk
 from tkinter import Label, Canvas
 from PIL import Image, ImageTk
 from gol import GameOfLife
 from utils import resource_path
+
 
 class MainApplication:
     def __init__(self, root):
@@ -28,7 +29,11 @@ class MainApplication:
         self.label1 = tk.Label(self.frame1, text="Press Play to start!")
         self.label1.pack(pady=(0, 10))
 
-        self.button = tk.Button(self.frame1, text="Play", command=self.start_game)
+        self.button = tk.Button(
+            self.frame1,
+            text="Play",
+            command=self.start_game
+            )
         self.button.pack()
 
         self.root.bind("<Configure>", self.on_resize)
@@ -40,7 +45,13 @@ class MainApplication:
             g = 0
             b = int(i * 255 / height)
             color = f'#{r:02x}{g:02x}{b:02x}'
-            self.canvas.create_line(0, i, self.root.winfo_width(), i, fill=color)
+            self.canvas.create_line(
+                0,
+                i,
+                self.root.winfo_width(),
+                i,
+                fill=color
+                )
 
     def load_logo(self):
         img = Image.open(resource_path("assets/img/logo.jpg"))
@@ -58,6 +69,7 @@ class MainApplication:
         self.frame1.destroy()
         self.canvas.destroy()
         self.game = GameOfLife(self.root)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

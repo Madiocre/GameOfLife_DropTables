@@ -1,8 +1,9 @@
-import os
+# import os
 import sys
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import subprocess
+
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, script_name):
@@ -19,6 +20,7 @@ class FileChangeHandler(FileSystemEventHandler):
         if event.src_path.endswith(".py"):
             print(f"Detected change in {event.src_path}, restarting...")
             self.run_script()
+
 
 if __name__ == "__main__":
     script_name = "main.py"  # Change this to your script's name
