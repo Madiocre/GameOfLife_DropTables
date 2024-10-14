@@ -47,18 +47,27 @@ class GameOfLife:
         self.draw_grid()
 
 
+    # Modified to preserve grid state when resizing
     def on_resize(self, event):
         canvas_width = self.canvas.winfo_width()
         canvas_height = self.canvas.winfo_height()
         
         if canvas_width > 1 and canvas_height > 1:
-            self.width = canvas_width // self.cell_size
-            self.height = canvas_height // self.cell_size
+            new_width = canvas_width // self.cell_size
+            new_height = canvas_height // self.cell_size
 
-            # TODO Preserve old entries somehow
-            # Only reinitialize the grid if the size has changed
-            if len(self.grid) != self.height or (self.grid and len(self.grid[0]) != self.width):
-                self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
+            # Only update the grid if the size has changed
+            if new_width != self.width or new_height != self.height:
+                new_grid = [[0 for _ in range(new_width)] for _ in range(new_height)]
+                
+                # Copy existing grid data to new grid
+                for i in range(min(self.height, new_height)):
+                    for j in range(min(self.width, new_width)):
+                        new_grid[i][j] = self.grid[i][j]
+                
+                self.grid = new_grid
+                self.width = new_width
+                self.height = new_height
             
             self.draw_grid()
 
@@ -66,14 +75,16 @@ class GameOfLife:
         self.canvas.delete("all")
         for i in range(self.height):
             for j in range(self.width):
-                # Calc Box cordinates 
-                x1 = j * self.cell_size
-                y1 = i * self.cell_size
-                x2 = x1 + self.cell_size
-                y2 = y1 + self.cell_size
-                # IS box clicked????? => black
-                fill = "white" if self.grid[i][j] == 0 else "black"
-                self.canvas.create_rectangle(x1, y1, x2, y2, fill=fill, outline="gray")
+                self.draw_cell(i, j)
+    
+    # New method to draw individual cells
+    def draw_cell(self, row, col):
+        x1 = col * self.cell_size
+        y1 = row * self.cell_size
+        x2 = x1 + self.cell_size
+        y2 = y1 + self.cell_size
+        fill = "black" if self.grid[row][col] == 1 else "white"
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill=fill, outline="gray")
 
     def start_selection(self, event):
         # on box drag + hover
@@ -106,6 +117,7 @@ class GameOfLife:
         while True:
             if 0 <= x0 < self.height and 0 <= y0 < self.width:
                 self.grid[x0][y0] = 1
+                self.draw_cell(x0, y0)
             if x0 == x1 and y0 == y1:
                 break
             e2 = 2 * err
@@ -125,11 +137,10 @@ class GameOfLife:
         # find location
         col = event.x // self.cell_size
         row = event.y // self.cell_size
-        # redraw grid
         if 0 <= row < self.height and 0 <= col < self.width:
             self.grid[row][col] = 1 - self.grid[row][col]
-            self.draw_grid()
-            if 1 - self.grid[row][col]:
+            self.draw_cell(row, col)
+            if self.grid[row][col] == 0:
                 self.remove_sound.play()
             else:
                 self.click_sound.play()
@@ -152,6 +163,19 @@ class GameOfLife:
                                  command=self.update_speed)
         self.speed_scale.set(5)  # Set default speed to middle value
         self.speed_scale.pack(side='right', padx=5, pady=5)
+        
+        # New: Add grid size control
+        self.grid_size_scale = Scale(self.control_panel, from_=10, to=50, orient='horizontal', label='Grid Size',
+                                     command=self.update_grid_size)
+        self.grid_size_scale.set(self.cell_size)
+        self.grid_size_scale.pack(side='right', padx=5, pady=5)
+    
+    # New method to handle grid size changes
+    def update_grid_size(self, val):
+        new_cell_size = int(val)
+        if new_cell_size != self.cell_size:
+            self.cell_size = new_cell_size
+            self.on_resize(None)  # Trigger a resize event to redraw the grid
 
     def toggle_play_pause(self):
         self.is_running = not self.is_running
