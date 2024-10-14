@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Label, Canvas
+from tkinter import Label, Canvas, OptionMenu, StringVar, ttk
 from PIL import Image, ImageTk
 from gol import GameOfLife
 from utils import resource_path
@@ -20,9 +20,17 @@ class MainApplication:
         self.root = root
         self.root.title("Game Of Life DropTables;")
         self.root.geometry("700x500")
-
-        # Set minimum width to 400 and height to 300
         self.root.minsize(400, 300)
+        
+        self.color_palettes = {
+            "Blue": {"primary": "#1e1e2e", "secondary": "#89b4fa", "accent": "#cdd6f4"},
+            "Red": {"primary": "#2e1e1e", "secondary": "#fa8989", "accent": "#f4cdcd"},
+            "Yellow": {"primary": "#2e2e1e", "secondary": "#fafa89", "accent": "#f4f4cd"},
+            "Green": {"primary": "#1e2e1e", "secondary": "#89fa89", "accent": "#cdf4cd"},
+            "Purple": {"primary": "#2e1e2e", "secondary": "#b489fa", "accent": "#e0cdf4"}
+        }
+        self.selected_palette = StringVar(value="Blue")
+        
         self.setup_main_ui()
 
     def setup_main_ui(self):
@@ -32,15 +40,19 @@ class MainApplication:
         Binds the resize event to the on_resize method and draws the
         initial gradient.
         """
+        self.style = ttk.Style()
+        self.style.theme_use('clam')
         self.canvas = Canvas(self.root)
         self.canvas.pack(fill="both", expand=True)
+        self.content_frame = ttk.Frame(self.canvas)
 
         self.frame = tk.Frame(self.root, bg=None)
         self.frame.place(relx=0.5, rely=0.5, anchor="center")
 
         self.load_logo()
-        self.create_label("Press Play to start!")
         self.create_button("Play", self.start_game)
+        self.create_palette_selector()
+        self.create_mute_button()
 
         self.root.bind("<Configure>", self.on_resize)
         self.draw_gradient()
@@ -52,10 +64,16 @@ class MainApplication:
         """
         height = self.root.winfo_height()
         width = self.root.winfo_width()
-        self.canvas.delete("all")  # Clear previous gradient
-        for i in range(0, height, 2):  # Step by 2 for slight optimization
-            b = int(i * 255 / height)
-            color = f'#0000{b:02x}'
+        self.canvas.delete("all")
+        primary_color = self.color_palettes[self.selected_palette.get()]["primary"]
+        secondary_color = self.color_palettes[self.selected_palette.get()]["secondary"]
+        for i in range(0, height, 2):
+            r1, g1, b1 = [int(primary_color[i:i+2], 16) for i in (1, 3, 5)]
+            r2, g2, b2 = [int(secondary_color[i:i+2], 16) for i in (1, 3, 5)]
+            r = int(r1 + (r2 - r1) * i / height)
+            g = int(g1 + (g2 - g1) * i / height)
+            b = int(b1 + (b2 - b1) * i / height)
+            color = f'#{r:02x}{g:02x}{b:02x}'
             self.canvas.create_line(0, i, width, i, fill=color)
 
     def load_logo(self):
@@ -77,7 +95,8 @@ class MainApplication:
         Args:
             text (str): The text to display in the label.
         """
-        label = tk.Label(self.frame, text=text)
+        label = tk.Label(self.frame, text=text, bg=self.color_palettes[self.selected_palette.get()]["primary"], 
+                         fg=self.color_palettes[self.selected_palette.get()]["accent"])
         label.pack(pady=(0, 10))
 
     def create_button(self, text, command):
@@ -90,8 +109,72 @@ class MainApplication:
             command (function): The function to call when the
             button is clicked.
         """
-        button = tk.Button(self.frame, text=text, command=command)
-        button.pack()
+        button_style = ttk.Style()
+        button_style.configure("TButton", 
+                               background=self.color_palettes[self.selected_palette.get()]["secondary"],
+                               foreground=self.color_palettes[self.selected_palette.get()]["primary"],
+                               font=("Helvetica", 14),
+                               padding=10)
+        button_style.map("TButton", 
+                         background=[('active', self.color_palettes[self.selected_palette.get()]["accent"])])
+        
+        button = ttk.Button(self.frame, text=text, command=command, style="TButton")
+        button.pack(pady=(0, 20))
+
+    def toggle_mute(self):
+        self.is_muted.set(not self.is_muted.get())
+        mute_status = "Unmute" if self.is_muted.get() else "Mute"
+        self.style.configure("Mute.TButton", text=mute_status)
+
+    def create_palette_selector(self):
+        label = ttk.Label(self.frame, text="Select Color Palette:", 
+                          style="TLabel")
+        label.pack(pady=(10, 5))
+
+        self.style.configure("TMenubutton", 
+                             background=self.color_palettes[self.selected_palette.get()]["secondary"],
+                             foreground=self.color_palettes[self.selected_palette.get()]["primary"],
+                             font=("Helvetica", 12),
+                             padding=5)
+
+        option_menu = ttk.OptionMenu(self.frame, self.selected_palette, 
+                                     self.selected_palette.get(), 
+                                     *self.color_palettes.keys(), 
+                                     command=self.update_color_scheme,
+                                     style="TMenubutton")
+        option_menu.pack()
+
+    def create_mute_button(self):
+        self.style.configure("Mute.TButton", 
+                             background=self.color_palettes[self.selected_palette.get()]["secondary"],
+                             foreground=self.color_palettes[self.selected_palette.get()]["primary"],
+                             font=("Helvetica", 12),
+                             padding=5)
+        
+        mute_button = ttk.Button(self.frame, text="Mute", command=self.toggle_mute, style="Mute.TButton")
+        mute_button.pack(pady=(10, 0))
+
+
+    def update_color_scheme(self, *args):
+        self.draw_gradient()
+        for child in self.frame.winfo_children():
+            widget_type = child.winfo_class()
+            if widget_type == "TLabel":
+                self.style.configure("TLabel", 
+                                     background=self.color_palettes[self.selected_palette.get()]["primary"],
+                                     foreground=self.color_palettes[self.selected_palette.get()]["accent"])
+            elif widget_type in ["TButton", "TMenubutton"]:
+                self.style.configure(widget_type, 
+                                     background=self.color_palettes[self.selected_palette.get()]["secondary"],
+                                     foreground=self.color_palettes[self.selected_palette.get()]["primary"])
+                self.style.map(widget_type, 
+                               background=[('active', self.color_palettes[self.selected_palette.get()]["accent"])])
+        
+        self.style.configure("Mute.TButton", 
+                             background=self.color_palettes[self.selected_palette.get()]["secondary"],
+                             foreground=self.color_palettes[self.selected_palette.get()]["primary"])
+        self.style.map("Mute.TButton", 
+                       background=[('active', self.color_palettes[self.selected_palette.get()]["accent"])])
 
     def on_resize(self, event=None):
         """
@@ -109,7 +192,7 @@ class MainApplication:
         """
         self.frame.destroy()
         self.canvas.destroy()
-        self.game = GameOfLife(self.root)
+        self.game = GameOfLife(self.root, self.color_palettes[self.selected_palette.get()])
 
 
 if __name__ == "__main__":
