@@ -250,6 +250,10 @@ class GameOfLife:
         self.load_button = Button(self.control_panel, text="Load", command=self.load_state, **button_style)
         self.load_button.pack(side='left', padx=5, pady=5)
 
+        # Add the randomize button
+        self.randomize_button = Button(self.control_panel, text="Randomize", command=self.randomize_grid, **button_style)
+        self.randomize_button.pack(side='left', padx=5, pady=5)
+
         self.mute_button = Button(self.control_panel, text="Mute", command=self.mute, **button_style)
         self.mute_button.pack(side='left', padx=5, pady=5)
         self.pattern_label = Label(self.control_panel, text="Pattern: None", bg=self.color_palette["primary"], fg=self.color_palette["accent"])
@@ -265,6 +269,26 @@ class GameOfLife:
         self.grid_size_scale.set(self.cell_size)
         self.grid_size_scale.pack(side='right', padx=5, pady=5)
 
+    def randomize_grid(self):
+        self.clear_grid()
+        
+        # Calculate the center of the grid
+        center_row = self.height // 2
+        center_col = self.width // 2
+        
+        # Calculate the maximum size of the random pattern (25-50% of total grid size)
+        max_size = int(min(self.width, self.height) * random.uniform(0.25, 0.5))
+        
+        # Generate random cells within the calculated area
+        for _ in range(max_size * max_size // 4):  # Using a quarter of max_size^2 for sparser population
+            row_offset = random.randint(-max_size//2, max_size//2)
+            col_offset = random.randint(-max_size//2, max_size//2)
+            row = (center_row + row_offset) % self.height
+            col = (center_col + col_offset) % self.width
+            self.grid[(row, col)] = 1
+        
+        self.draw_grid()
+        self.click_sound.play()
      
     def save_state(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".json",
