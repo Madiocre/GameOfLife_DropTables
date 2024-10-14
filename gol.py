@@ -6,6 +6,81 @@ from pygame import mixer
 from utils import resource_path
 
 class GameOfLife:
+    """
+    A class to represent Conway's Game of Life using Tkinter for the GUI and 
+    Pygame for audio. It provides controls for starting, pausing, and stepping through the simulation using next/speed, as well as 
+    functionalities for drawing on the grid and saving/loading grid states.
+
+    Attributes:
+        master (tk.Tk): The root window for the Tkinter application.
+        color_palette (dict): A dictionary containing colors for different UI components (e.g., primary, secondary, accent).
+        muted (tk.BooleanVar): A variable indicating whether the sound is muted.
+        bgm (pygame.mixer.Sound): The background music sound object.
+
+    Methods:
+        update_sound_volume():
+            Updates the volume for sound effects based on the muted state.
+        
+        mute():
+            Toggles the mute state of the game and adjusts the volume accordingly.
+        
+        initialize_grid():
+            Sets up the grid based on the current window size and draws the initial grid.
+        
+        on_resize(event):
+            Handles the window resizing event, adjusts the grid size, and redraws the grid.
+        
+        draw_grid():
+            Draws the grid lines and existing cells on the canvas.
+        
+        draw_cell(row, col):
+            Draws a single cell on the canvas at the specified row and column.
+        
+        start_selection(event):
+            Starts a selection process for drawing cells on the grid when the user clicks the canvas.
+        
+        update_selection(event):
+            Updates the selection, filling cells between the previous and current mouse positions.
+        
+        fill_cells_between(start, end):
+            Fills cells along a line between two points,used for dragging the mouse to draw on the grid.
+        
+        end_selection(event):
+            Ends the selection process for drawing cells on the grid.
+        
+        toggle_cell(event):
+            Toggles the state of a cell (alive or dead) at the position where the user clicks.
+        
+        create_control_panel():
+            Creates the control panel with buttons for playing, pausing, clearing the grid, muting, and saving/loading states.
+        
+        save_state():
+            Opens a file dialog to save the current grid state as a JSON file at a choosen path.
+        
+        load_state():
+            Opens a file dialog to load a grid state from a JSON file.
+        
+        update_grid_size(val):
+            Updates the size of the grid cells based on the provided value.
+        
+        toggle_play_pause():
+            start/stop.
+        
+        run_game():
+            Continuously updates.
+        
+        next_frame():
+            Advances the simulation to the next frame.
+        
+        count_neighbors(row, col):
+            Counts the number of alive neighbors for a given cell according to the rules.
+        
+        clear_grid():
+            Wipe the grid.
+        
+        update_speed(val):
+            Custom speed.
+    """
     def __init__(self, master, color_palette, muted, bgm):
         self.master = master
         self.color_palette = color_palette

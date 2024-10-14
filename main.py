@@ -47,6 +47,7 @@ class MainApplication:
 
 
     def setup_intro(self):
+        """Cool fading intro."""
         self.intro_canvas = tk.Canvas(self.root, bg="black")
         self.intro_canvas.pack(fill="both", expand=True)
 
@@ -60,6 +61,7 @@ class MainApplication:
         self.root.after(500, self.fade_in_logo)
 
     def fade_in_logo(self, alpha=0):
+        """Cool fading logo."""
         if alpha < 255:
             alpha += 5
             logo_image = self.logo_image.copy()
@@ -71,6 +73,7 @@ class MainApplication:
             self.root.after(500, self.fade_in_team_text)
 
     def fade_in_team_text(self, alpha=0):
+        """Cool fading text for the intro."""
         if alpha < 255:
             alpha += 5
             self.intro_canvas.itemconfig(self.team_text, state='normal', fill=f'#{alpha:02x}{alpha:02x}{alpha:02x}')
@@ -79,6 +82,7 @@ class MainApplication:
             self.root.after(1000, self.fade_out_intro)
 
     def fade_out_intro(self, alpha=255):
+        """Cool fading text for the intro."""
         if alpha > 0:
             alpha -= 5
             logo_image = self.logo_image.copy()
@@ -92,6 +96,7 @@ class MainApplication:
             self.setup_main_ui()
 
     def setup_main_ui(self):
+        """Start building home page."""
         self.style = ttk.Style()
         self.style.theme_use('clam')
     
@@ -212,6 +217,7 @@ class MainApplication:
             self.mute_button.config(text="Mute")
 
     def create_palette_selector(self):
+        """The color palatte panel."""
         label = ttk.Label(self.frame, text="Select Color Palette:", 
                           style="TLabel")
         label.pack(pady=(10, 5))
@@ -238,6 +244,7 @@ class MainApplication:
         self.mute_button.pack(pady=(10, 10))
 
     def update_color_scheme(self, *args):
+        """Reflect the color choice on the UI."""
         self.draw_gradient()
         for child in self.frame.winfo_children():
             widget_type = child.winfo_class()
