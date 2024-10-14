@@ -20,6 +20,9 @@ class MainApplication:
         self.root = root
         self.root.title("Game Of Life DropTables;")
         self.root.geometry("700x500")
+
+        # Set minimum width to 400 and height to 300
+        self.root.minsize(400, 300)
         self.setup_main_ui()
 
     def setup_main_ui(self):

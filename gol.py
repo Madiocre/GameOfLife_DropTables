@@ -18,6 +18,9 @@ class GameOfLife:
             master (tk.Tk): The root window of the application.
         """
         self.master = master
+
+        # Set minimum width to 450 and height to 350
+        self.master.minsize(450, 350)
         self.cell_size = 20
         self.is_running = False
         self.speed = 5
