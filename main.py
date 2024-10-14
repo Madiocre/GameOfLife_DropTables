@@ -5,7 +5,6 @@ from PIL import Image
 from gol import GameOfLife
 from utils import resource_path
 
-
 class MainApplication:
     def __init__(self):
         self.root = ctk.CTk()
