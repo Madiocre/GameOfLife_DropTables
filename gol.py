@@ -144,7 +144,7 @@ class GameOfLife:
                 self.grid[(row, col)] = 1
                 self.draw_cell(row, col)
                 self.click_sound.play()
-            self.draw_grid()  # Redraw the entire grid to ensure grid lines are on top
+            self.draw_grid()
 
     def create_control_panel(self):
         self.control_panel = Frame(self.frame, bg=self.color_palette["primary"])

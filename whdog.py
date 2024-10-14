@@ -82,5 +82,5 @@ def watch_directory(script_name, directory='.'):
 
 
 if __name__ == "__main__":
-    script_name = "main.py"  # Change this to your script's name
+    script_name = "main.py"
     watch_directory(script_name)

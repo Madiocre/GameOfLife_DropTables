@@ -35,28 +35,44 @@ This project emphasizes code structure, Tkinter usage, and visual design to prov
 ## Features
 
 - Responsive design for various screen sizes
-- Custmoizable game play
-- muliple colors
-- audio feedback
-- Ready packaged builds
+- One click Drag to fastly select boxes
+- Resizable window
+- Game speed controls
+- Grid size controls
+- Customizable game play
+- Muliple colors / New look every start
+- Audio feedback
+- Ready packaged builds on every push
 
 
 ## Technology Stack
 
-- Tkinter
+### python packages
+- Tkinter (main gui framework)
 - pygame (audio handling)
+- pyinstaller (packaging)
+- pillow (image handling)
+- watchdog (hot reload for devs)
+- json
+- random
+- os
+
+### other
+- github workflows (Building and Releases)
+- github actions (triggering new builds)
+
 
 ## Project Structure
 
 ```text
 .
-├── Dockerfile
 ├── LICENSE
 ├── README.md
 ├── assets
 │   ├── img
-│   │   └── logo.jpg
+│   │   └── logo.png
 │   └── music
+│       ├── lofi.mp3
 │       ├── s1.wav
 │       ├── s2.wav
 │       └── s3.wav

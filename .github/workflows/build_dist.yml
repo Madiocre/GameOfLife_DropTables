@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Linux executable
         run: |
-          pyinstaller --onefile --add-data "./assets:assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py
+          pyinstaller --onefile --add-data "./assets:assets" --icon="assets/img/logo.png" --hidden-import "PIL._tkinter_finder" --windowed main.py
         shell: bash
 
       - name: Upload Linux artifact
@@ -50,7 +50,7 @@ jobs:
 
       - name: Build Windows & linux executable
         run: |
-          pyinstaller --onefile --add-data "assets;assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py
+          pyinstaller --onefile --add-data "assets;assets" --icon="assets/img/logo.png" --hidden-import "PIL._tkinter_finder" --windowed main.py
           ls dist/
         shell: bash
 
