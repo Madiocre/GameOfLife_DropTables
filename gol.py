@@ -6,7 +6,7 @@ from pygame import mixer
 from utils import resource_path
 
 class GameOfLife:
-    def __init__(self, master, color_palette, muted):
+    def __init__(self, master, color_palette, muted, bgm):
         self.master = master
         self.color_palette = color_palette
         self.cell_size = 20
@@ -23,6 +23,7 @@ class GameOfLife:
         pygame.mixer.init()
         self.click_sound = mixer.Sound(resource_path("assets/music/s2.wav"))
         self.remove_sound = mixer.Sound(resource_path("assets/music/s1.wav"))
+        self.bgm = bgm
         self.is_muted = muted.get()
         self.update_sound_volume()
 
@@ -49,6 +50,13 @@ class GameOfLife:
         volume = 0 if self.is_muted else 1
         self.click_sound.set_volume(volume)
         self.remove_sound.set_volume(volume)
+
+    def mute(self):
+        self.is_muted = not self.is_muted
+        volume = 0 if self.is_muted else 1
+        self.click_sound.set_volume(volume)
+        self.remove_sound.set_volume(volume)
+        self.bgm.set_volume(volume)
 
     def initialize_grid(self):
         self.on_resize(None)
@@ -161,6 +169,9 @@ class GameOfLife:
         self.save_button.pack(side='left', padx=5, pady=5)
         self.load_button = Button(self.control_panel, text="Load", command=self.load_state, **button_style)
         self.load_button.pack(side='left', padx=5, pady=5)
+
+        self.mute_button = Button(self.control_panel, text="Mute", command=self.mute, **button_style)
+        self.mute_button.pack(side='left', padx=5, pady=5)
 
         self.speed_scale = Scale(self.control_panel, from_=1, to=10, orient='horizontal', label='Speed',
                                  command=self.update_speed, **scale_style)

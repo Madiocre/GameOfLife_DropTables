@@ -101,8 +101,8 @@ This project emphasizes code structure, Tkinter usage, and visual design to prov
 
 ## Building
 - make sure you have all requirments installed (See last section)
-- On linux run `pyinstaller --onefile --add-data "./assets:assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py`
-- On windows run `pyinstaller --onefile --add-data "assets;assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py`
+- On linux run `pyinstaller --onefile --add-data "./assets:assets" --icon="assets/img/logo.png" --hidden-import "PIL._tkinter_finder" --windowed main.py`
+- On windows run `pyinstaller --onefile --add-data "assets;assets" --icon="assets/img/logo.png" --hidden-import "PIL._tkinter_finder" --windowed main.py`
 - Your build should be in `dist/` folder
 
 Enjoy :D

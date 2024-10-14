@@ -23,6 +23,8 @@ class MainApplication:
         self.root = root
         self.root.title("Game Of Life DropTables;")
         self.root.geometry("700x500")
+        icon = tk.PhotoImage(file=resource_path("assets/img/logo.png"))
+        self.root.iconphoto(True, icon)
 
         # Set minimum width to 400 and height to 300
         self.root.minsize(400, 300)
@@ -34,11 +36,12 @@ class MainApplication:
             "Purple": {"primary": "#2e1e2e", "secondary": "#b489fa", "accent": "#e0cdf4"}
         }
         self.selected_palette = StringVar(value=random.choice(list(self.color_palettes.keys())))
-        self.audio_file = resource_path("assets/music/lofi_8bit.mp3")
+        self.audio_file = resource_path("assets/music/lofi.mp3")
         pygame.mixer.init()
         pygame.mixer.music.load(self.audio_file)
         pygame.mixer.music.play(-1) 
         self.is_muted = tk.BooleanVar(value=False)
+        self.bgmusic = pygame.mixer.music
         
         self.setup_intro()
 
@@ -271,7 +274,7 @@ class MainApplication:
         """
         self.frame.destroy()
         self.canvas.destroy()
-        self.game = GameOfLife(self.root, self.color_palettes[self.selected_palette.get()], self.is_muted)
+        self.game = GameOfLife(self.root, self.color_palettes[self.selected_palette.get()], self.is_muted, self.bgmusic)
 
 
 if __name__ == "__main__":
