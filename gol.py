@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import Label, Button, Canvas, Frame, Scale, filedialog
 import pygame
 from pygame import mixer
+from utils import resource_path
 
 class GameOfLife:
     def __init__(self, master, color_palette):
@@ -15,15 +16,14 @@ class GameOfLife:
         self.is_selecting = False
         self.last_cell = None
 
-        # Add these lines at the end of __init__
         self.save_button = None
         self.load_button = None
 
-        # pygame for audio (unchanged)
+        # pygame for audio :D
         pygame.mixer.init()
-        self.background_music = mixer.Sound("assets/music/s3.wav")
-        self.click_sound = mixer.Sound("assets/music/s2.wav")
-        self.remove_sound = mixer.Sound("assets/music/s1.wav")
+        self.background_music = mixer.Sound(resource_path("assets/music/s3.wav"))
+        self.click_sound = mixer.Sound(resource_path("assets/music/s2.wav"))
+        self.remove_sound = mixer.Sound(resource_path("assets/music/s1.wav"))
 
         self.frame = Frame(self.master, bg=self.color_palette["primary"])
         self.frame.pack(fill="both", expand=True)
@@ -36,7 +36,7 @@ class GameOfLife:
         self.height = 0
 
         self.create_control_panel()
-
+        
         self.master.bind("<Configure>", self.on_resize)
         self.canvas.bind("<Button-1>", self.start_selection)
         self.canvas.bind("<B1-Motion>", self.update_selection)
@@ -51,7 +51,7 @@ class GameOfLife:
     def on_resize(self, event):
         canvas_width = self.canvas.winfo_width()
         canvas_height = self.canvas.winfo_height()
-
+        
         if canvas_width > 1 and canvas_height > 1:
             self.width = canvas_width // self.cell_size
             self.height = canvas_height // self.cell_size
@@ -59,13 +59,13 @@ class GameOfLife:
 
     def draw_grid(self):
         self.canvas.delete("all")
-        self.canvas.create_rectangle(0, 0, self.width * self.cell_size, self.height * self.cell_size,
+        self.canvas.create_rectangle(0, 0, self.width * self.cell_size, self.height * self.cell_size, 
                                      fill=self.color_palette["primary"], width=0)
-
+        
         # Draw all cells first
         for (row, col) in self.grid:
             self.draw_cell(row, col)
-
+        
         # Draw grid lines on top
         for i in range(0, self.width * self.cell_size + 1, self.cell_size):
             self.canvas.create_line(i, 0, i, self.height * self.cell_size, fill=self.color_palette["accent"])
@@ -136,9 +136,9 @@ class GameOfLife:
         self.control_panel = Frame(self.frame, bg=self.color_palette["primary"])
         self.control_panel.pack(side='bottom', fill='x')
 
-        button_style = {'bg': self.color_palette["secondary"], 'fg': self.color_palette["primary"],
+        button_style = {'bg': self.color_palette["secondary"], 'fg': self.color_palette["primary"], 
                         'activebackground': self.color_palette["accent"], 'activeforeground': self.color_palette["primary"]}
-        scale_style = {'bg': self.color_palette["primary"], 'fg': self.color_palette["accent"],
+        scale_style = {'bg': self.color_palette["primary"], 'fg': self.color_palette["accent"], 
                        'troughcolor': self.color_palette["secondary"], 'activebackground': self.color_palette["secondary"]}
 
         self.play_pause_button = Button(self.control_panel, text="Play", command=self.toggle_play_pause, **button_style)
@@ -151,10 +151,9 @@ class GameOfLife:
         self.clear_button.pack(side='left', padx=5, pady=5)
 
         # Add Save and Load buttons
-        self.save_button = Button(self.control_panel, text="Save", command=self.save_state)
+        self.save_button = Button(self.control_panel, text="Save", command=self.save_state, **button_style)
         self.save_button.pack(side='left', padx=5, pady=5)
-
-        self.load_button = Button(self.control_panel, text="Load", command=self.load_state)
+        self.load_button = Button(self.control_panel, text="Load", command=self.load_state, **button_style)
         self.load_button.pack(side='left', padx=5, pady=5)
 
         self.speed_scale = Scale(self.control_panel, from_=1, to=10, orient='horizontal', label='Speed',
@@ -167,6 +166,7 @@ class GameOfLife:
         self.grid_size_scale.set(self.cell_size)
         self.grid_size_scale.pack(side='right', padx=5, pady=5)
 
+     
     def save_state(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".json",
                                                  filetypes=[("JSON files", "*.json"), ("All files", "*.*")])
@@ -185,15 +185,13 @@ class GameOfLife:
         if file_path:
             with open(file_path, "r") as f:
                 state = json.load(f)
-
+            
             self.cell_size = state["cell_size"]
             self.grid = {tuple(cell): 1 for cell in state["grid"]}
             self.width = state["width"]
             self.height = state["height"]
-
             # Update the grid size scale
             self.grid_size_scale.set(self.cell_size)
-
             # Redraw the grid
             self.draw_grid()
 
@@ -226,7 +224,7 @@ class GameOfLife:
                         new_grid[(i, j)] = 1
                 elif neighbors == 3:
                     new_grid[(i, j)] = 1
-
+        
         self.grid = new_grid
         self.draw_grid()
 

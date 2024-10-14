@@ -20,8 +20,9 @@ class MainApplication:
         self.root = root
         self.root.title("Game Of Life DropTables;")
         self.root.geometry("700x500")
+
+        # Set minimum width to 400 and height to 300
         self.root.minsize(400, 300)
-        
         self.color_palettes = {
             "Blue": {"primary": "#1e1e2e", "secondary": "#89b4fa", "accent": "#cdd6f4"},
             "Red": {"primary": "#2e1e1e", "secondary": "#fa8989", "accent": "#f4cdcd"},
@@ -130,13 +131,11 @@ class MainApplication:
         label = ttk.Label(self.frame, text="Select Color Palette:", 
                           style="TLabel")
         label.pack(pady=(10, 5))
-
         self.style.configure("TMenubutton", 
                              background=self.color_palettes[self.selected_palette.get()]["secondary"],
                              foreground=self.color_palettes[self.selected_palette.get()]["primary"],
                              font=("Helvetica", 12),
                              padding=5)
-
         option_menu = ttk.OptionMenu(self.frame, self.selected_palette, 
                                      self.selected_palette.get(), 
                                      *self.color_palettes.keys(), 
@@ -153,7 +152,6 @@ class MainApplication:
         
         mute_button = ttk.Button(self.frame, text="Mute", command=self.toggle_mute, style="Mute.TButton")
         mute_button.pack(pady=(10, 0))
-
 
     def update_color_scheme(self, *args):
         self.draw_gradient()
