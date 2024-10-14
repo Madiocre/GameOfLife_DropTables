@@ -88,7 +88,9 @@ Game Of Life Python remake using tkinter By Droptables
 4. Install requirments:
    - `pip3 install -r requirments.txt`
 
-5. Run the Application
+
+## Running the Application
+
    - `python3 main.py`
 
 ## Building
