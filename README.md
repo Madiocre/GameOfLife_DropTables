@@ -1,6 +1,4 @@
 # GameOfLife_DropTables
-
-
 ![LOGO](assets/img/logo.jpg)
 
 ## Live
@@ -8,11 +6,10 @@ Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife
 
 ## Screenshots
 ![s1](.res/s1.png)
-![s2](.res/Carosel1.png)
-![s3](.res/Carosel2.png)
-![s4](.res/Movie.png)
-![s5](.res/Register.png)
-![s6](.res/Map.png)
+![s1](.res/s2.png)
+![s1](.res/s3.png)
+![s1](.res/s4.png)
+![s1](.res/s5.png)
 
 ## Table of Contents
 
@@ -20,24 +17,28 @@ Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife
 2. [Features](#features)
 3. [Technology Stack](#technology-stack)
 4. [Project Structure](#project-structure)
-5. [Setup and Installation](#setup-and-installation)
-6. [Running the Application](#running-the-application)
-7. [API Endpoints](#api-endpoints)
-9. [Database Schema](#database-schema)
-10. [Configuration](#configuration)
-11. [License](#license)
+5. [Development](#Development)
+6. [Setup and Installation](#setup-and-installation)
+7. [Running the Application](#running-the-application)
+8. [License](#license)
 
 ## Introduction
 
-...........................
+Game Of Life Python remake using tkinter By Droptables
 
 ## Features
 
 - Responsive design for various screen sizes
+- Custmoizable game play
+- muliple colors
+- audio feedback
+- Ready packaged builds
+
 
 ## Technology Stack
 
-- Backend: Flask (Python)
+- Tkinter
+- pygame (audio handling)
 
 ## Project Structure
 
@@ -47,15 +48,20 @@ Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife
 ├── LICENSE
 ├── README.md
 ├── assets
-│   └── img
-│       └── logo.jpg
+│   ├── img
+│   │   └── logo.jpg
+│   └── music
+│       ├── s1.wav
+│       ├── s2.wav
+│       └── s3.wav
 ├── gol.py
 ├── main.py
 ├── main.spec
 ├── requirments.txt
+├── utils.py
 └── whdog.py
 
-2 directories, 9 files
+3 directories, 13 files
 ```
 
 ## Development
@@ -91,17 +97,7 @@ Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife
 - On windows run `pyinstaller --onefile --add-data "assets;assets"  --hidden-import "PIL._tkinter_finder" --windowed main.py`
 - Your build should be in `dist/` folder
 
-## Running the Application (Still under progress)
-
-```sh
-docker run -p 5000:5000 remyrecipex
-```
-
 Enjoy :D
-
-## Configuration
-
-................
 
 ## Authors
 
