@@ -43,6 +43,7 @@ This project emphasizes code structure, Tkinter usage, and visual design to prov
 - Muliple colors / New look every start
 - Audio feedback
 - Ready packaged builds on every push
+- Linux + Windows Support
 
 
 ## Technology Stack
