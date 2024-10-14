@@ -1,5 +1,5 @@
 # GameOfLife_DropTables
-![LOGO](assets/img/logo.jpg)
+![LOGO](assets/img/logo.png)
 
 ## Live
 Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife_DropTables/releases)

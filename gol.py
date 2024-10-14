@@ -6,7 +6,7 @@ from pygame import mixer
 from utils import resource_path
 
 class GameOfLife:
-    def __init__(self, master, color_palette):
+    def __init__(self, master, color_palette, muted):
         self.master = master
         self.color_palette = color_palette
         self.cell_size = 20
@@ -21,9 +21,10 @@ class GameOfLife:
 
         # pygame for audio :D
         pygame.mixer.init()
-        self.background_music = mixer.Sound(resource_path("assets/music/s3.wav"))
         self.click_sound = mixer.Sound(resource_path("assets/music/s2.wav"))
         self.remove_sound = mixer.Sound(resource_path("assets/music/s1.wav"))
+        self.is_muted = muted.get()
+        self.update_sound_volume()
 
         self.frame = Frame(self.master, bg=self.color_palette["primary"])
         self.frame.pack(fill="both", expand=True)
@@ -43,6 +44,11 @@ class GameOfLife:
         self.canvas.bind("<ButtonRelease-1>", self.end_selection)
 
         self.master.after(100, self.initialize_grid)
+
+    def update_sound_volume(self):
+        volume = 0 if self.is_muted else 1
+        self.click_sound.set_volume(volume)
+        self.remove_sound.set_volume(volume)
 
     def initialize_grid(self):
         self.on_resize(None)
