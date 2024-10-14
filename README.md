@@ -24,7 +24,13 @@ Grab your OS version from [Releases Page](https://github.com/Madiocre/GameOfLife
 
 ## Introduction
 
-Game Of Life Python remake using tkinter By Droptables
+Game Of Life A Python Desktop App using Tkinter By Droptables
+
+This project is an interactive desktop application simulating John Conway’s Game of Life, a famous cellular automaton. The game consists of a grid of cells that evolve from generation to generation based on a set of simple rules. Each cell can either be alive or dead, and its state in the next generation is determined by the state of its neighboring cells.
+
+The objective of this project is to bring Conway's Game of Life to life using Python's Tkinter library, creating a visually appealing and user-friendly interface. The app not only showcases the beauty of emergent patterns through the game’s evolution but also allows users to experiment with custom patterns, explore boundary conditions, and control the simulation speed.
+
+This project emphasizes code structure, Tkinter usage, and visual design to provide an engaging experience for users, offering customization and interactivity at every step.
 
 ## Features
 
@@ -88,7 +94,9 @@ Game Of Life Python remake using tkinter By Droptables
 4. Install requirments:
    - `pip3 install -r requirments.txt`
 
-5. Run the Application
+
+## Running the Application
+
    - `python3 main.py`
 
 ## Building
